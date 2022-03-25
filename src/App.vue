@@ -1,20 +1,27 @@
 <template>
+  <div class="game">
   <h1>Timer Project</h1>
-  <button @click="startGame">Play</button>
-  <blockVue v-if="isPlaying" />
+  <button class="btn" @click="startGame" :disabled="isPlaying">Play</button>
+ </div> 
+  <blockVue v-if="isPlaying" :delay="delay" @end='endGame'/>
+  <ResultsVue  v-if="showResult" :score="score"/>
+  
 </template>
 
 <script>
 import BlockVue from './components/BlockVue.vue'
+import ResultsVue from './components/ResultsVue.vue'
 
 export default {
   name: 'App',
-  components: {BlockVue},
+  components: {BlockVue,ResultsVue},
   data(){
 
     return{
         isPlaying:false,
-        delay:0
+        delay:null,
+        score : null,
+        showResult :false
     }
   },
   
@@ -22,8 +29,13 @@ export default {
     startGame(){
       this.delay = 2000 + Math.random()*5000
       this.isPlaying=true
-      console.log(this.delay)
+      this.showResult=false
 
+    },
+    endGame(reaction){
+      this.score = reaction
+      this.isPlaying=false
+      this.showResult=true
     }
   }
 }
@@ -37,5 +49,9 @@ export default {
   text-align: center;
   color: #444;
   margin-top: 60px;
+}
+
+.btn{
+  box-shadow: 1px 1px 5px black;
 }
 </style>

@@ -1,12 +1,38 @@
 <template>
-  <div class="block">
+  <div class="block" v-if="showBlock" @click="stopTimer">
       Clic Me
   </div>
 </template>
 
 <script>
 export default {
-    props:['delay']
+    props:['delay'],
+    data(){
+        return {
+            showBlock : false,
+            timer : null,
+            reactionTime :0
+        }
+    },
+    mounted(){
+        setTimeout(() => {
+            this.showBlock=true
+            this.startTimer()
+            console.log(this.delay)
+        }, this.delay);
+    },
+    methods:{
+        startTimer(){
+            this.timer = setInterval(()=>{
+                this.reactionTime += 10
+            },10)
+        },
+        stopTimer(){
+            clearInterval(this.timer)
+            this.$emit('end',this.reactionTime)
+        }
+    }
+
 
 }
 </script>
@@ -15,10 +41,12 @@ export default {
 .block{
     width: 400px;
     border-radius: 15px;
-    background-color: aqua;
+    background-color: rgb(255, 174, 0);
     color: white;
     text-align: center;
     padding:100px 0;
     margin: 40px auto;
+    font-weight: bold;
+    font-size: 2em;
 }
 </style>
